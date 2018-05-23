@@ -1,0 +1,109 @@
+klasa lista_klockow
+	podklasa klocek
+	pola:`
+		short prawa_liczba
+		short lewa_liczba
+		klocek* nastepny
+		klocek* poprzedni
+pola:
+	klocek* pierwszy;
+	klocek* przedostatni
+metody:
+	lista_klockow()
+		Konstruktor domyœlny.
+	short lewy_koniec()
+		Zwraca lewy koniec listy.
+	short prawy_koniec()
+		Zwraca prawy koniec listy.
+	ostream wyswietl(ostream& blat)
+		Wyœwietla na blacie listê klocków.
+	void dodaj_pierwszy (short lewa_liczba, short prawa_liczba)
+		Dodaje klocek na pocz¹tek listy.
+	void dodaj_ostatni (short lewa_liczba, short prawa_liczba)
+		Dodaje klocek na koniec listy.
+	bool usun_klocek(short liczba_1, short liczba_2)
+		Usuwa podany klocek z listy.
+		Zwraca true, jeœli siê to uda³o, a false jeœli nie znaleziono podanego klocka na liœcie.
+	void dostepne_liczby(bool& liczby[LICZBY_NA_KLOCKACH])
+		Zwraca przez referencjê zbiór liczb wystêpuj¹cych na liœcie.
+	~lista_klockow()
+		Destruktor listy klocków.
+klasa stol
+	Dziedziczy po lista_klockow.
+pola:
+	static bool stol_istnieje
+		True jeœli stol ju¿ skonstruowano, false w przeciwnym przypadku.
+	stol()
+		Konstruktor domyœlny.
+	~stol()
+		Destruktor.
+klasa worek
+	Dziedziczy po lista_klockow.
+metody:
+	worek()
+		Konstruktor tworzy niepotasowan¹ listê klocków.
+	~worek()
+		Destruktor.
+enum typ_gracza {cpu_latwy, cpu_trudny, czlowiek}
+	Typ wyliczeniowy u¿ywany do rozró¿niania typów graczy.
+gracz
+	dziedziczy po lista_klockow
+pola:
+	typ_gracza kto_steruje
+		Mówi o tym, czy jest to gracz ludzki, komputer ³atwy, czy komputer trudny.
+	short id_gracza
+		Unikalny numer gracza.
+	gracz* nastepny_gracz
+		Wskazuje, który gracz jest nastêpny. Ostatni gracz wskazuje na pierwszego.
+    gracz* poprzedni_gracz
+		Wskazuje, który gracz jest poprzedni. Pierwszy gracz wskazuje na ostatniego.
+    static gracz* poczatek_listy_graczy
+		Wskazuje pierwszego gracza.
+    static gracz* koniec_listy_graczy
+		Wskazuje ostatniego gracza.
+    static short liczba_graczy
+		Aktualna liczba graczy. U¿ywana do nadawania graczom id.
+    static short przyblokowani
+		Liczba graczy, którzy nie mogli w danym momencie gry wykonaæ ruchu ani dobraæ klocka.
+		U¿ywana do wykrywania remisu.
+metody:
+	gracz(typ_gracza kto_ma_sterowac = czlowiek)
+		Konstruktor domyœlnie tworzy gracza ludzkiego.
+	bool dobierz_klocek()
+		Usuwa pierwszy klocek z worka i dodaje go na koniec swojej listy.
+		Zwracafalse jeœli w worku nie ma klocków.
+	void mieszaj_worek()
+		Zmienia kolejnoœæ klocków na liœcie worka.
+		Losuje  2 liczby od 0 do LICZBY_NA_KLOCKACH+1 i rzuca monet¹ czy prze³o¿yæ klocek z tymi liczbami
+		na pocz¹tek czy na koniec listy worka. operacjê powtarza 100*(LICZBY_NA_KLOCKACH+1)^2 razy.
+	bool mozliwosc_ruchu(short lewy_koniec_stolu,short prawy_koniec_stolu)
+		Zwraca true jeœli gracz ma na swojej liœcie conajmniej jedn¹ z podanych liczb.
+	bool wez_klocek(short liczba_na_klocku_a, short liczba_na_klocku_b)
+		Usuwa klocek z podanymi liczbami ze swojej listy.
+		Zwraca true w przypadku sukcesu.
+		Zwraca false jeœli takiego klocka nie znaleziono.
+	klocek* daj_nty_klocek(short numer_klocka)
+		Zwraca wskaŸnik do n-tego klocka na liœcie.
+	void rozdaj()
+		Przeje¿d¿a 5 razy przez listê graczy.
+		Za ka¿dym razem ka¿dy gracz dobiera klocek.
+	void rusz_sie(lista_klockow* stol)
+		Wyk³ada klocek na podany stó³.
+		W przypadku gracza ludzkiego pyta który klocek do³o¿yæ i gdzie.
+		W przypadku gracza komputerowego wybiera klocek do do³o¿enia.
+		Wywo³uje ruch nastêpnego gracza lub koñczy siê z informacj¹ o zwyciêstwie b¹dŸ remisie.
+	~gracz()
+		Destruktor.
+
+klasa gra
+metody:
+	gra()
+		Konstruktor. Pyta siê ilu i jakich graczy stworzyæ, tworzy ich listy klocków, stó³ i worek.
+	void graj()
+		Wywo³uje ruch pierwszego gracza.
+	~gra()
+		Destruktor. Nic nie robi.
+funkcja main
+	Ustawia random seed.
+	W pêtli tworzy grê i wywo³uje jej metodê graj(). Po zakoñczeniu gry pyta czy zacz¹æ kolejn¹ grê. 
+	W zale¿noœci od odpowiedzi koñczy pêtlê i dzia³anie programu lub przechodzi do kolejnego obiegu pêtli.
